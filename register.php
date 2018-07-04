@@ -1,8 +1,8 @@
 <?php
 
 // PARAMETRI DA MODIFICARE
-$WEBHOOK_URL = 'https://myespbot.herokuapp.com/execute.php';
-$BOT_TOKEN = '337086481:AAFZM670VVwr2q9DDqx1_XbHBOlVnQxSroY';
+$WEBHOOK_URL = 'https://heatplug.herokuapp.com/execute.php';
+$BOT_TOKEN = '571477284:AAFVE1fkHa_grACHExUWYdslZ1UVtU2sCd4';
 
 // NON APPORTARE MODIFICHE NEL CODICE SEGUENTE
 $API_URL = 'https://api.telegram.org/bot' . $BOT_TOKEN .'/';
