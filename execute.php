@@ -1,5 +1,5 @@
 <?php
-//11-07-2018
+//11-09-2018
 //started on 04-07-2018
 // La app di Heroku si puo richiamare da browser con
 //			https://heatplug.herokuapp.com/
@@ -59,7 +59,7 @@ if(strpos($text, "/start") === 0 || $text=="ciao" || $text == "help"){
 elseif($text=="/on_on"){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/3");
 }
-elseif($text=="/plon_htof"){
+elseif(strpos($text,"plon_htof")){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/2");
 }
 elseif($text=="/plof_hton"){
@@ -91,7 +91,7 @@ else
 $parameters = array('chat_id' => $chatId, "text" => $response);
 $parameters["method"] = "sendMessage";
 // imposto la keyboard
-$parameters["reply_markup"] = '{ "keyboard": [["/on_on", "/plon_htof"],["/plof_hton", "/off_off"],["/heatplug","/verbose"]], "resize_keyboard": true, "one_time_keyboard": false}';
+$parameters["reply_markup"] = '{ "keyboard": [["/on_on", "/plon_htof \ud83d\udd0c"],["/plof_hton", "/off_off"],["/heatplug","/verbose"]], "resize_keyboard": true, "one_time_keyboard": false}';
 // converto e stampo l'array JSON sulla response
 echo json_encode($parameters);
 ?>
