@@ -62,7 +62,7 @@ elseif($text=="/on_on"){
 elseif(strpos($text,"plon_htof")){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/2");
 }
-elseif($text=="/plof_hton"){
+elseif(strpos($text,"plof_hton")){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/1");
 }
 elseif($text=="/off_off"){
@@ -91,7 +91,7 @@ else
 $parameters = array('chat_id' => $chatId, "text" => $response);
 $parameters["method"] = "sendMessage";
 // imposto la keyboard
-$parameters["reply_markup"] = '{ "keyboard": [["/on_on", "/plon_htof \ud83d\udd0c"],["/plof_hton", "/off_off"],["/heatplug","/verbose"]], "resize_keyboard": true, "one_time_keyboard": false}';
+$parameters["reply_markup"] = '{ "keyboard": [["/on_on", "/plon_htof \ud83d\udd0c"],["/plof_hton \ud83d\udd04", "/off_off"],["/heatplug","/verbose"]], "resize_keyboard": true, "one_time_keyboard": false}';
 // converto e stampo l'array JSON sulla response
 echo json_encode($parameters);
 ?>
