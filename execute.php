@@ -1,5 +1,5 @@
 <?php
-//11-09-2018
+//28-11-2018
 //started on 04-07-2018
 // La app di Heroku si puo richiamare da browser con
 //			https://heatplug.herokuapp.com/
@@ -65,7 +65,7 @@ elseif(strpos($text,"plon_htof")){
 elseif(strpos($text,"plof_hton")){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/1");
 }
-elseif($text=="/off_off"){
+elseif($text=="off_off"){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/0");
 }
 //<-- Lettura parametri slave5
@@ -84,14 +84,16 @@ else
 {
 	$response = "Unknown command!";			//<---Capita quando i comandi contengono lettere maiuscole
 }
-
+// Gli EMOTICON sono a:     http://www.charbase.com/block/miscellaneous-symbols-and-pictographs
+//													https://unicode.org/emoji/charts/full-emoji-list.html
+//													https://apps.timwhitlock.info/emoji/tables/unicode
 // la mia risposta è un array JSON composto da chat_id, text, method
 // chat_id mi consente di rispondere allo specifico utente che ha scritto al bot
 // text è il testo della risposta
 $parameters = array('chat_id' => $chatId, "text" => $response);
 $parameters["method"] = "sendMessage";
 // imposto la keyboard
-$parameters["reply_markup"] = '{ "keyboard": [["/on_on", "/plon_htof \ud83d\udd0c"],["/plof_hton \ud83d\udd04", "/off_off"],["/heatplug","/verbose"]], "resize_keyboard": true, "one_time_keyboard": false}';
+$parameters["reply_markup"] = '{ "keyboard": [["/on_on", "/plon_htof \ud83d\udd0c"],["/plof_hton \ud83d\udd04", "/off_off \ud83d\udd35"],["/heatplug"]], "resize_keyboard": true, "one_time_keyboard": false}';
 // converto e stampo l'array JSON sulla response
 echo json_encode($parameters);
 ?>
