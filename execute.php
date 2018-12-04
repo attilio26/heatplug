@@ -1,5 +1,5 @@
 <?php
-//30-11-2018
+//04-12-2018
 //started on 04-07-2018
 // La app di Heroku si puo richiamare da browser con
 //			https://heatplug.herokuapp.com/
@@ -65,7 +65,7 @@ elseif(strpos($text,"plon_htof")){
 elseif(strpos($text,"plof_hton")){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/1");
 }
-elseif($text=="off_off"){
+elseif(strpos($text,"off_off")){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/0");
 }
 //<-- Lettura parametri slave5
