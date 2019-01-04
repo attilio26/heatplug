@@ -1,5 +1,5 @@
 <?php
-//27-12-2018
+//04-01-2019
 //started on 04-07-2018
 // La app di Heroku si puo richiamare da browser con
 //			https://heatplug.herokuapp.com/
@@ -56,7 +56,7 @@ if(strpos($text, "/start") === 0 || $text=="ciao" || $text == "help"){
 }
 
 //<-- Comandi ai rele
-elseif($text=="on_on"){
+elseif(strpos($text,"on_on")){
 	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/3");
 }
 elseif(strpos($text,"plon_htof")){
