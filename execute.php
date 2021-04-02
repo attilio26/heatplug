@@ -1,5 +1,5 @@
 <?php
-//04-01-2019
+//02-04-2021
 //started on 04-07-2018
 // La app di Heroku si puo richiamare da browser con
 //			https://heatplug.herokuapp.com/
@@ -26,6 +26,45 @@ if(!$update)
 {
   exit;
 }
+function clean_html_page($str_in){
+//elimino i caratteri html dalla pagina del wemos casa zie
+	$startch = strpos($str_in,"Uptime:") + 43 ;							//primo carattere utile da estrarre
+	$endch = strpos($str_in,"Tds1");					//ultimo carattere utile da estrarre
+	$str_in = substr($str_in, $startch, ($endch - $startch));				// substr(string,start,length)
+	$str_in = str_replace("<a href='?a="," ",$str_in);
+	$str_in = str_replace("<br>"," ",$str_in);
+	$str_in = str_replace(" </a></h2><h2>"," ",$str_in);
+	$str_in = str_replace("</a>"," -- ",$str_in);
+	$str_in = str_replace("4'/>"," ",$str_in);
+	$str_in = str_replace("5'/>"," ",$str_in);
+	$str_in = str_replace("6'/>"," ",$str_in);
+	$str_in = str_replace("7'/>"," ",$str_in);	
+	$str_in = str_replace("8'/>"," ",$str_in);
+	$str_in = str_replace("9'/>"," ",$str_in);
+	$str_in = str_replace("a'/>"," ",$str_in);	
+	$str_in = str_replace("b'/>"," ",$str_in);	
+	$str_in = str_replace("c'/>"," ",$str_in);	
+	$str_in = str_replace("d'/>"," ",$str_in);	
+	$str_in = str_replace("e'/>"," ",$str_in);	
+	$str_in = str_replace("f'/>"," ",$str_in);	
+	$str_in = str_replace("g'/>"," ",$str_in);	
+	$str_in = str_replace("h'/>"," ",$str_in);	
+	$str_in = str_replace("i'/>"," ",$str_in);	
+	$str_in = str_replace("l'/>"," ",$str_in);	
+	$str_in = str_replace("k'/>"," ",$str_in);		
+	$str_in = str_replace("m'/>"," ",$str_in);	
+	$str_in = str_replace("n'/>"," ",$str_in);
+	$str_in = str_replace("o'/>"," ",$str_in);	
+	$str_in = str_replace("p'/>"," ",$str_in);
+	$str_in = str_replace("q'/>"," ",$str_in);
+	$str_in = str_replace("<h2>"," ",$str_in);	
+//elimino i caratteri della pagina che non interessano la stazione bedzie
+	$startch = strpos($str_in,"slave6");
+	$endch = strpos($str_in,"slave5");	
+	$str_in = substr($str_in,$startch,($endch - $startch));
+	return $str_in;
+}
+
 
 $message = isset($update['message']) ? $update['message'] : "";
 $messageId = isset($message['message_id']) ? $message['message_id'] : "";
@@ -48,29 +87,34 @@ $response = '';
 
 if(strpos($text, "/start") === 0 || $text=="ciao" || $text == "help"){
 	$response = "Ciao $firstname, benvenuto! \n List of commands : 
-	/on_on -> outlet ON  heater ON
-	/plon_htof -> outlet ON   heater OFF  
-	/plof_hton -> outlet OFF  heater ON 
-	/off_off -> outlet OFF  heater OFF 
+	/plug_on  -> outlet ON  
+	/plug_off -> outlet OFF    
+	/fan_on   -> heater ON 
+	/fan_off  -> heater OFF 
 	/heatplug  -> Lettura stazione6 ... su bus RS485  \n/verbose -> parametri del messaggio";
 }
 
 //<-- Comandi ai rele
-elseif(strpos($text,"on_on")){
-	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/3");
+elseif(strpos($text,"plug_on")){
+	$resp = file_get_contents("http://dario95.ddns.net:8083/?a=6");
+	$response = clean_html_page($resp);
 }
-elseif(strpos($text,"plon_htof")){
-	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/2");
+elseif(strpos($text,"plug_off")){
+	$resp = file_get_contents("http://dario95.ddns.net:8083/?a=7");
+	$response = clean_html_page($resp);
 }
-elseif(strpos($text,"plof_hton")){
-	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/1");
+elseif(strpos($text,"fan_on")){
+	$resp = file_get_contents("http://dario95.ddns.net:8083/?a=4");
+	$response = clean_html_page($resp);
 }
-elseif(strpos($text,"off_off")){
-	$response = file_get_contents("http://dario95.ddns.net:8083/rele/6/0");
+elseif(strpos($text,"fan_off")){
+	$resp = file_get_contents("http://dario95.ddns.net:8083/?a=5");
+	$response = clean_html_page($resp);
 }
 //<-- Lettura parametri slave5
 elseif(strpos($text,"heatplug")){
-	$response = file_get_contents("http://dario95.ddns.net:8083/heatplug");
+	$resp = file_get_contents("http://dario95.ddns.net:8083");
+	$response = clean_html_page($resp);
 }
 
 //<-- Manda a video la risposta completa
@@ -93,7 +137,15 @@ else
 $parameters = array('chat_id' => $chatId, "text" => $response);
 $parameters["method"] = "sendMessage";
 // imposto la keyboard
-$parameters["reply_markup"] = '{ "keyboard": [["/on_on \ud83d\udd34", "/plon_htof \ud83d\udd0c"],["/plof_hton \ud83d\udd04", "/off_off \ud83d\udd35"],["/heatplug \u2753"]], "resize_keyboard": true, "one_time_keyboard": false}';
+$parameters["reply_markup"] = '
+	{ "keyboard": 
+		[
+			["/plug_on \ud83d\udd0c", "/plug_off \ud83d\udd35"],
+			["/fan_on \ud83d\udd04", "/fan_off \ud83d\udd35"],
+			["/heatplug \u2753"]
+		],
+		"resize_keyboard": true, "one_time_keyboard": false
+	}';
 // converto e stampo l'array JSON sulla response
 echo json_encode($parameters);
 ?>
