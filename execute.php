@@ -147,5 +147,5 @@ $parameters["reply_markup"] = '
 		"resize_keyboard": true, "one_time_keyboard": false
 	}';
 // converto e stampo l'array JSON sulla response
-echo json_encode($parameters);
+ echo json_encode($parameters);
 ?>
